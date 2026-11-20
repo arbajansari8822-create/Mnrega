@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLang } from '../context/LangContext';
 
 /** Bottom-sheet guide. Optional `link` adds an "open portal" button; `place` shows the saved panchayat. */
-export default function GuideModal({ title, steps, note, link, place, onClose }) {
+export default function GuideModal({ title, steps, note, link, link2, place, onClose }) {
   const { t } = useLang();
   const closeRef = useRef(null);
 
@@ -48,6 +48,11 @@ export default function GuideModal({ title, steps, note, link, place, onClose })
         {link && (
           <a href={link} target="_blank" rel="noopener noreferrer" className="btn-primary mt-4 w-full">
             🌐 {t.openPortal}
+          </a>
+        )}
+        {link2 && (
+          <a href={link2} target="_blank" rel="noopener noreferrer" className="btn-ghost mt-3 w-full text-sm">
+            🗂️ {t.openOld}
           </a>
         )}
         <button ref={closeRef} onClick={onClose} className="btn-ghost mt-3 w-full">

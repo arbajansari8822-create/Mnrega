@@ -12,6 +12,7 @@ import { useLang } from '../context/LangContext';
 import { useLocationCtx } from '../context/LocationContext';
 import { fetchJobCardData } from '../utils/mockApi';
 import { isValidJobCard, LINKS } from '../utils/config';
+import { stateLinkFor } from '../data/stateLinks';
 
 const rupee = (n) => '₹' + Number(n).toLocaleString('en-IN');
 
@@ -140,7 +141,8 @@ export default function Dashboard() {
           title={{ demand: t.guideTitle, jobcard: t.jcGuideTitle, muster: t.mrGuideTitle }[guide]}
           steps={{ demand: t.guideSteps, jobcard: t.jcGuideSteps, muster: t.mrGuideSteps }[guide]}
           note={guide === 'demand' ? t.guideNote : t.portalGuideNote}
-          link={guide === 'demand' ? null : guide === 'jobcard' ? LINKS.jobCardPdf : LINKS.musterRoll}
+          link={guide === 'demand' ? null : guide === 'jobcard' ? (stateLinkFor(location.state.name.en)?.vbgramg || LINKS.jobCardPdf) : LINKS.musterRoll}
+          link2={guide === 'jobcard' ? (stateLinkFor(location.state.name.en)?.legacy || LINKS.legacyMis) : guide === 'muster' ? LINKS.legacyMis : null}
           place={guide === 'demand' ? null : `${tx(location.panchayat.name)} › ${tx(location.block.name)} › ${tx(location.district.name)} › ${tx(location.state.name)}`}
         />
       )}
