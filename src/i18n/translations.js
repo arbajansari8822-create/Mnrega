@@ -9,6 +9,8 @@ export const translations = {
     setupSub: 'एक बार चुनें, फिर हर बार अपने आप खुलेगा।',
     state: 'राज्य', district: 'ज़िला', block: 'ब्लॉक', panchayat: 'ग्राम पंचायत',
     choose: '— चुनें —',
+    otherOpt: 'सूची में नहीं है — खुद लिखें',
+    typeName: 'नाम लिखें',
     saveLocation: 'जगह सेव करें',
     changeLocation: 'बदलें',
     // dashboard
@@ -96,6 +98,8 @@ export const translations = {
     setupSub: 'Pick once. It will open automatically every time.',
     state: 'State', district: 'District', block: 'Block', panchayat: 'Gram Panchayat',
     choose: '— Select —',
+    otherOpt: 'Not in list — type it',
+    typeName: 'Type the name',
     saveLocation: 'Save Location',
     changeLocation: 'Change',
     jobCardLabel: 'Job Card number (18 characters)',

@@ -56,3 +56,9 @@ CLI alternative: `npx vercel --prod`.
 - `src/data/stateLinks.js`: state-wise Job Card entry links (35 states/UTs, new + legacy portal). Muster roll uses the citizen `mustlogin.aspx` link.
 - These links (incl. encrypted `payload`/`Digest` tokens) were copied from panchayatsetu.in, a **private** (non-government) site; the hosts are official `*.dord.gov.in`. They return 401 outside India, so they were **not opened** from the build sandbox. Test from an Indian network and re-check periodically, since the tokens may change.
 - MIS report list on the new portal: R1 Beneficiary Detail, R4 Musteroll and Wagelist, R7 Financial, R8 e-FMS, etc.
+
+## Location data status
+- Jharkhand: all 24 districts, all 18 Ranchi blocks. Panchayat lists only for Namkum, Kanke, Ormanjhi (sample).
+- Other states: a few sample districts only.
+- Every level (district/block/panchayat) has a "Not in list — type it" option, so any village can be saved.
+- Full data: LGD (lgdirectory.gov.in > Download Directory) has complete state/district/block/GP lists, but the download needs a captcha. Download the CSV manually and import it into `src/data/` (ideally as one lazy-loaded JSON per state).
