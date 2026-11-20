@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import { LOCATIONS, byId } from '../data/locations';
+import { LOCATIONS, OTHER, byId } from '../data/locations';
 import { useLang } from '../context/LangContext';
 import { useLocationCtx } from '../context/LocationContext';
 
-function Select({ id, label, value, onChange, options, disabled }) {
+/** Dropdown with a trailing "not in list" option that reveals a text box. */
+function Select({ id, label, value, onChange, options, disabled, allowOther, typed, onTyped }) {
   const { t, tx } = useLang();
   return (
     <div>
@@ -13,7 +14,14 @@ function Select({ id, label, value, onChange, options, disabled }) {
       <select id={id} value={value} disabled={disabled} onChange={(e) => onChange(e.target.value)} className="field">
         <option value="">{t.choose}</option>
         {options.map((o) => <option key={o.id} value={o.id}>{tx(o.name)}</option>)}
+        {allowOther && <option value={OTHER}>{t.otherOpt}</option>}
       </select>
+      {value === OTHER && (
+        <input
+          aria-label={`${label}: ${t.typeName}`} value={typed} onChange={(e) => onTyped(e.target.value)}
+          placeholder={t.typeName} maxLength={60} autoComplete="off" className="field mt-2"
+        />
+      )}
     </div>
   );
 }
@@ -29,12 +37,16 @@ export default function Setup() {
   const [d, setD] = useState(init.districtId);
   const [b, setB] = useState(init.blockId);
   const [p, setP] = useState(init.panchayatId);
+  const [dn, setDn] = useState(location?.districtId === OTHER ? location.district.name.en : '');
+  const [bn, setBn] = useState(location?.blockId === OTHER ? location.block.name.en : '');
+  const [pn, setPn] = useState(location?.panchayatId === OTHER ? location.panchayat.name.en : '');
 
   const state = byId(LOCATIONS, s);
   const district = state && byId(state.districts, d);
   const block = district && byId(district.blocks, b);
 
-  const ready = s && d && b && p;
+  const filled = (v, typed) => v && (v !== OTHER || typed.trim());
+  const ready = s && filled(d, dn) && filled(b, bn) && filled(p, pn);
 
   return (
     <>
@@ -49,18 +61,25 @@ export default function Setup() {
           onSubmit={(e) => {
             e.preventDefault();
             if (!ready) return;
-            saveLocation({ stateId: s, districtId: d, blockId: b, panchayatId: p });
+            saveLocation({
+              stateId: s, districtId: d, blockId: b, panchayatId: p,
+              ...(d === OTHER && { districtName: dn.trim() }),
+              ...(b === OTHER && { blockName: bn.trim() }),
+              ...(p === OTHER && { panchayatName: pn.trim() }),
+            });
             navigate('/', { replace: true });
           }}
         >
           <Select id="state" label={t.state} value={s} options={LOCATIONS}
             onChange={(v) => { setS(v); setD(''); setB(''); setP(''); }} />
           <Select id="district" label={t.district} value={d} options={state?.districts || []} disabled={!s}
-            onChange={(v) => { setD(v); setB(''); setP(''); }} />
+            allowOther typed={dn} onTyped={setDn}
+            onChange={(v) => { setD(v); setB(v === OTHER ? OTHER : ''); setP(v === OTHER ? OTHER : ''); }} />
           <Select id="block" label={t.block} value={b} options={district?.blocks || []} disabled={!d}
-            onChange={(v) => { setB(v); setP(''); }} />
+            allowOther typed={bn} onTyped={setBn}
+            onChange={(v) => { setB(v); setP(v === OTHER ? OTHER : ''); }} />
           <Select id="panchayat" label={t.panchayat} value={p} options={block?.panchayats || []} disabled={!b}
-            onChange={setP} />
+            allowOther typed={pn} onTyped={setPn} onChange={setP} />
           <button type="submit" disabled={!ready} className="btn-primary w-full text-lg disabled:opacity-50">
             ✅ {t.saveLocation}
           </button>
