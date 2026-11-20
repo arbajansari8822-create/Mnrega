@@ -33,7 +33,7 @@ Cards ending `000` return "not found". Every result is flagged `isDemo: true` an
 Test with e.g. `JH0512003001000011`.
 
 ## Needs verification before launch
-- `src/utils/config.js`: only the NREGA portal home is a known URL. Job Card / Muster Roll / VB-G RAM G
+- `src/utils/config.js`: VB-G RAM G portal home (`vbgramg.dord.gov.in/vbgramg/home.aspx`, listed on the PIB factsheet) is used; the legacy `nrega.nic.in` redirects to `nrega.dord.gov.in`. Job Card / Muster Roll / VB-G RAM G
   portal deep links must be confirmed on the live official site (they could not be verified from the build sandbox).
 - `src/data/locations.js` is sample data. Use the official LGD list.
 - Job Card format: the app accepts 18 alphanumeric characters (per spec). Check against real cards.
@@ -45,3 +45,8 @@ Test with e.g. `JH0512003001000011`.
 2. vercel.com > Add New > Project > import the repo. Framework: **Vite** (auto), build `npm run build`, output `dist`.
 3. Deploy. `vercel.json` already handles SPA routing. HTTPS is automatic, so the PWA is installable.
 CLI alternative: `npx vercel --prod`.
+
+## Data options (research notes)
+- Citizen reports on the official portal need state/year/district/block/panchayat selection (and captcha on some pages): no public API, and `mnregaweb4.nic.in` returned 403 to cloud IPs, so a serverless scraper may be blocked.
+- data.gov.in "District-wise MGNREGA Data at a Glance" exists but its page says no API is available (there is a "Request API" option); it is district-level, not per Job Card.
+- Per-Job-Card data therefore needs either an official API from MoRD/NIC or a scraper that the portal terms allow.

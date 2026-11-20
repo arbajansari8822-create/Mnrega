@@ -11,7 +11,7 @@ import InstallPrompt from '../components/InstallPrompt';
 import { useLang } from '../context/LangContext';
 import { useLocationCtx } from '../context/LocationContext';
 import { fetchJobCardData } from '../utils/mockApi';
-import { isValidJobCard } from '../utils/config';
+import { isValidJobCard, LINKS } from '../utils/config';
 
 const rupee = (n) => '₹' + Number(n).toLocaleString('en-IN');
 
@@ -35,7 +35,7 @@ export default function Dashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [guide, setGuide] = useState(false);
+  const [guide, setGuide] = useState(null); // 'demand' | 'jobcard' | 'muster'
   const reqId = useRef(0); // ignore stale responses
 
   const load = useCallback(async (id) => {
@@ -131,10 +131,19 @@ export default function Dashboard() {
           )}
         </div>
 
-        <QuickActions onGuide={() => setGuide(true)} />
+        <QuickActions onGuide={setGuide} />
         <p className="pt-2 text-center text-xs text-slate-500">{t.footer}</p>
       </main>
-      {guide && <GuideModal onClose={() => setGuide(false)} />}
+      {guide && (
+        <GuideModal
+          onClose={() => setGuide(null)}
+          title={{ demand: t.guideTitle, jobcard: t.jcGuideTitle, muster: t.mrGuideTitle }[guide]}
+          steps={{ demand: t.guideSteps, jobcard: t.jcGuideSteps, muster: t.mrGuideSteps }[guide]}
+          note={guide === 'demand' ? t.guideNote : t.portalGuideNote}
+          link={guide === 'demand' ? null : guide === 'jobcard' ? LINKS.jobCardPdf : LINKS.musterRoll}
+          place={guide === 'demand' ? null : `${tx(location.panchayat.name)} › ${tx(location.block.name)} › ${tx(location.district.name)} › ${tx(location.state.name)}`}
+        />
+      )}
     </>
   );
 }

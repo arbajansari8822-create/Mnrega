@@ -23,9 +23,9 @@ export default function QuickActions({ onGuide }) {
     <section aria-label={t.actions}>
       <h2 className="mb-2 text-lg font-extrabold">{t.actions}</h2>
       <div className="grid grid-cols-2 gap-3">
-        <Tile icon="📄" label={t.actJobCard} href={LINKS.jobCardPdf} />
-        <Tile icon="📋" label={t.actMuster} href={LINKS.musterRoll} />
-        <Tile icon="✍️" label={t.actApply} onClick={onGuide} />
+        <Tile icon="📄" label={t.actJobCard} onClick={() => onGuide('jobcard')} />
+        <Tile icon="📋" label={t.actMuster} onClick={() => onGuide('muster')} />
+        <Tile icon="✍️" label={t.actApply} onClick={() => onGuide('demand')} />
         <Tile icon="🌐" label={t.actPortal} href={LINKS.officialPortal} />
       </div>
       <p className="mt-2 text-xs text-slate-500">🔗 {t.opensNew}</p>
