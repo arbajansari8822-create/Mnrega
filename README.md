@@ -50,3 +50,9 @@ CLI alternative: `npx vercel --prod`.
 - Citizen reports on the official portal need state/year/district/block/panchayat selection (and captcha on some pages): no public API, and `mnregaweb4.nic.in` returned 403 to cloud IPs, so a serverless scraper may be blocked.
 - data.gov.in "District-wise MGNREGA Data at a Glance" exists but its page says no API is available (there is a "Request API" option); it is district-level, not per Job Card.
 - Per-Job-Card data therefore needs either an official API from MoRD/NIC or a scraper that the portal terms allow.
+
+## Official report links (research, Nov 2026)
+- Report hosts: new VB-G RAM G `vbgramgrep.dord.gov.in/VBGRAMG/`, legacy `mnregaweb2/4.dord.gov.in`.
+- `src/data/stateLinks.js`: state-wise Job Card entry links (35 states/UTs, new + legacy portal). Muster roll uses the citizen `mustlogin.aspx` link.
+- These links (incl. encrypted `payload`/`Digest` tokens) were copied from panchayatsetu.in, a **private** (non-government) site; the hosts are official `*.dord.gov.in`. They return 401 outside India, so they were **not opened** from the build sandbox. Test from an Indian network and re-check periodically, since the tokens may change.
+- MIS report list on the new portal: R1 Beneficiary Detail, R4 Musteroll and Wagelist, R7 Financial, R8 e-FMS, etc.

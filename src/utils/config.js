@@ -1,21 +1,19 @@
 // All outbound links live here so they are easy to correct.
 //
-// Sources (research, Nov 2026):
-// - VB-G RAM G portal: vbgramg.dord.gov.in is listed on the PIB factsheet for the
-//   Ministry of Rural Development; home page path /vbgramg/home.aspx.
-// - Legacy portal: nrega.nic.in now redirects to nrega.dord.gov.in (checked directly).
-// - Reports (Job Card list, Muster Roll / R2) are reached from the portal's
-//   State Report > State > Year > District > Block > Panchayat flow. Those pages need
-//   per-panchayat parameters, so we link to the portal home instead of guessing URLs.
-// NOT YET VERIFIED by opening the live pages (they were unreachable from the build
-// sandbox): exact report URLs. Replace the TODO links below once confirmed.
+// Sources: PIB factsheet (portal home), and the report hosts used by the official portals
+// (*.dord.gov.in), found via the private site panchayatsetu.in. Job Card links are
+// state-wise (see data/stateLinks.js). Official hosts return 401 outside India, so these
+// links were not opened from the build sandbox: test them from an Indian network.
 export const PORTAL_HOME = 'https://vbgramg.dord.gov.in/vbgramg/home.aspx';
 export const LEGACY_PORTAL_HOME = 'https://nrega.dord.gov.in/MGNREGA_new/Nrega_home.aspx';
 
 export const LINKS = {
   officialPortal: PORTAL_HOME,
-  jobCardPdf: PORTAL_HOME, // TODO: State Report > Job Card list for the saved panchayat
-  musterRoll: PORTAL_HOME, // TODO: Panchayat report R2 (Demand, Allocation & Muster Roll)
+  jobCardPdf: 'https://vbgramgrep.dord.gov.in/VBGRAMG/MISreport.aspx', // fallback when a state has no direct link
+  // Citizen muster roll entry (VB-G RAM G). Same link for all states.
+  musterRoll:
+    'https://vbgramgrep.dord.gov.in/VBGRAMG/citizen_html/mustlogin.aspx?payload=hbJIUb6UFzsPoTY_xEJTSs47nLzY1IIPhPgSkb3E8V4rV4D9_19DWrDYeokBgpNgG4lb1cyM7wPDkilFDJNbaoOFWfzITn0flcyvd0hH9Vo',
+  legacyMis: 'https://mnregaweb4.dord.gov.in/netnregarep/MISreport4.aspx', // old MGNREGA reports (FY 2025-26 and earlier)
 };
 
 export const JOB_CARD_LENGTH = 18;
